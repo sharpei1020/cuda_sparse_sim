@@ -1,0 +1,22 @@
+project(ext LANGUAGES CUDA C CXX)
+cmake_minimum_required(VERSION 3.10)
+set(CMAKE_BUILD_TYPE Release)
+
+set(Python3_USE_STATIC_LIBS FALSE)
+set(CMAKE_CUDA_ARCHITECTURES 86)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+set(CUDNN_INCLUDE_DIR=/usr/local/cuda-12.2/include)
+set(CUDNN_LIBRARY=/usr/local/cuda-12.2/lib64)
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --extended-lambda")
+
+find_package(Python3 COMPONENTS Interpreter Development)
+find_package(PythonLibs REQUIRED)
+find_package(pybind11)
+include_directories(${PYTHON_INCLUDE_DIRS})
+include_directories(.)
+
+pybind11_add_module(ext DTC.cu)
+target_link_libraries(ext PUBLIC ${PYTHON_LIBRARIES})
